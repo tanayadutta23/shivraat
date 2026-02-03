@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For My Forever ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Georgia',serif}
+body{
+  background:#0d0b12;
+  color:#fff;
+  overflow:hidden;
+}
+.screen{
+  width:100vw;
+  height:100vh;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  text-align:center;
+  padding:20px;
+  position:relative;
+}
+.active{display:flex}
+
+/* BUTTONS */
+button{
+  padding:14px 26px;
+  border:none;
+  border-radius:30px;
+  font-size:18px;
+  margin:10px;
+  cursor:pointer;
+}
+.yes{background:#ff4d6d;color:#fff}
+.no{background:#555;color:#fff;position:absolute}
+
+/* MAP LINE */
+.line{
+  width:0;
+  height:4px;
+  background:red;
+  margin:20px auto;
+  animation:draw 3s forwards;
+}
+@keyframes draw{
+  to{width:300px}
+}
+
+/* ENVELOPE */
+.envelope{
+  width:260px;
+  height:180px;
+  background:#c49b66;
+  border-radius:10px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+.letter{
+  background:#f5deb3;
+  color:#3b2f2f;
+  padding:20px;
+  border-radius:10px;
+  max-width:600px;
+  box-shadow:0 0 30px rgba(255,200,150,.6);
+  display:none;
+}
+
+/* ROSE */
+.rose{font-size:80px}
+
+/* PANDA */
+.panda{font-size:120px}
+
+/* FADE */
+.fade{
+  animation:fadein 2s;
+}
+@keyframes fadein{
+  from{opacity:0}
+  to{opacity:1}
+}
+
+/* FIREWORK CANVAS */
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_cdaffbfcb3.mp3" type="audio/mpeg">
+</audio>
+
+<!-- SCREEN 1 -->
+<div class="screen active fade" id="s1">
+  <h1>Hey you look like the rest of my life 💘</h1>
+  <p>Kolkata ❤️ Ludhiana</p>
+  <div class="line"></div>
+  <p>30h 15m (1,846 km)</p>
+  <div>
+    <button class="yes" onclick="next()">Yes</button>
+    <button class="no" id="no">No</button>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen fade" id="s2">
+  <div class="envelope" onclick="openLetter()">📩 Click on me</div>
+  <div class="letter" id="letter">
+    <p>
+    To my hardworking man,<br><br>
+    I'm a date-to-marry person, and I hope you know that.<br><br>
+    You are mine and only mine. You'll never be unloved by me till my last breath.<br><br>
+    I promised myself that you'll be my last love.<br><br>
+    Be safe everyday, proud of you & I love you ❤️
+    </p>
+    <br>
+    <button class="yes" onclick="next()">Next</button>
+  </div>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen fade" id="s3">
+  <div class="rose">🌹🌹🌹</div>
+  <h2>I will always be with you</h2>
+  <p>Especially in your bad & tired days 🤍</p>
+  <button class="yes" onclick="next()">Next</button>
+</div>
+
+<!-- SCREEN 4 -->
+<div class="screen fade" id="s4">
+  <div class="panda">🐼</div>
+  <h2>"Can I irritate you for the rest of my life?"</h2>
+  <button class="yes" onclick="next()">Yes Always</button>
+</div>
+
+<!-- SCREEN 5 (FINAL) -->
+<div class="screen fade" id="s5">
+  <canvas id="fireworks"></canvas>
+  <div class="panda">🐼❤️</div>
+  <h2>The Day I marry You</h2>
+  <h3>will be the happiest & happiest day of my life ❤️</h3>
+</div>
+
+<script>
+let current=1;
+function next(){
+  document.getElementById("s"+current).classList.remove("active");
+  current++;
+  document.getElementById("s"+current).classList.add("active");
+  if(current===5) startFireworks();
+}
+
+/* DRAMATIC NO */
+const no=document.getElementById("no");
+no.addEventListener("mouseover",()=>{
+  no.style.left=Math.random()*80+"%";
+  no.style.top=Math.random()*80+"%";
+});
+
+/* LETTER */
+function openLetter(){
+  document.querySelector(".envelope").style.display="none";
+  document.getElementById("letter").style.display="block";
+}
+
+/* FIREWORKS */
+function startFireworks(){
+const canvas=document.getElementById("fireworks");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+function createFirework(){
+  let x=Math.random()*canvas.width;
+  let y=Math.random()*canvas.height/2;
+  for(let i=0;i<50;i++){
+    particles.push({
+      x,y,
+      dx:(Math.random()-0.5)*4,
+      dy:(Math.random()-0.5)*4,
+      life:60,
+      color:`hsl(${Math.random()*360},100%,60%)`
+    });
+  }
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    ctx.fillStyle=p.color;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fill();
+    p.x+=p.dx;
+    p.y+=p.dy;
+    p.life--;
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+setInterval(createFirework,800);
+animate();
+}
+</script>
+
+</body>
+</html>
